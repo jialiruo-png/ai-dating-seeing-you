@@ -699,8 +699,8 @@ h1 em {
   white-space: nowrap;
 }
 .card-details {
-  top: 35.5%;
-  bottom: 16.5%;
+  top: 38%;
+  bottom: 18%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(3, minmax(0, 1fr));
@@ -741,18 +741,25 @@ h1 em {
   overflow-wrap: anywhere;
 }
 .card-footer {
-  bottom: 5%;
+  bottom: 4.5%;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
+  gap: 6px;
   border-top: 1px solid rgba(98, 51, 63, 0.28);
-  padding-top: 9px;
+  padding-top: 7px;
   color: #633d47;
-  font-size: 8.5px;
+  font-size: 7.8px;
   font-weight: 650;
+  white-space: nowrap;
+}
+.card-footer span,
+.card-footer small {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 .card-footer small {
-  font-size: 7.5px;
+  font-size: 7px;
   opacity: 0.86;
 }
 .generated-card-image {
