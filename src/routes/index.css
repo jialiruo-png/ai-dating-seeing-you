@@ -294,6 +294,55 @@ h1 em {
   max-width: 320px;
   margin: 0 auto;
 }
+.runaway-choice-area {
+  position: relative;
+  width: min(100%, 320px);
+  height: 126px;
+  margin: 0 auto;
+}
+.runaway-choice-area .yes-button,
+.runaway-choice-area .no-button {
+  position: absolute;
+  top: 37px;
+  width: calc(50% - 6px);
+  min-height: 52px;
+}
+.runaway-choice-area .yes-button {
+  left: 0;
+  z-index: 1;
+  margin: 0;
+}
+.no-button {
+  right: 0;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid rgba(177, 126, 137, 0.35);
+  border-radius: 17px;
+  color: #87646c;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 8px 20px rgba(105, 60, 72, 0.09);
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+  touch-action: none;
+  transition:
+    left 70ms cubic-bezier(0.2, 0.9, 0.3, 1),
+    top 70ms cubic-bezier(0.2, 0.9, 0.3, 1),
+    transform 70ms ease;
+}
+.no-button.is-running {
+  right: auto;
+  transform: rotate(-1.5deg);
+}
+.runaway-hint {
+  margin: -8px 0 0;
+  color: #9a6674;
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-size: 12px;
+}
 
 .section-heading {
   display: grid;

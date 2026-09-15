@@ -110,8 +110,14 @@ export default function Page() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [generating, setGenerating] = useState(false);
   const [storageReady, setStorageReady] = useState(false);
+  const [noPosition, setNoPosition] = useState<{ left: number; top: number } | null>(
+    null,
+  );
+  const [noAttempts, setNoAttempts] = useState(0);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const runawayAreaRef = useRef<HTMLDivElement>(null);
+  const noButtonRef = useRef<HTMLButtonElement>(null);
 
   const dates = useMemo(
     () =>
@@ -157,6 +163,45 @@ export default function Page() {
     setState(current => ({ ...current, ...patch }));
   const next = () => update({ step: Math.min(5, state.step + 1) });
   const back = () => update({ step: Math.max(0, state.step - 1) });
+
+  const moveNoButton = () => {
+    const area = runawayAreaRef.current;
+    const button = noButtonRef.current;
+    if (!area || !button) return;
+
+    const areaRect = area.getBoundingClientRect();
+    const buttonRect = button.getBoundingClientRect();
+    const padding = 8;
+    const maxLeft = Math.max(padding, areaRect.width - buttonRect.width - padding);
+    const maxTop = Math.max(padding, areaRect.height - buttonRect.height - padding);
+
+    let left = padding;
+    let top = padding;
+    for (let attempt = 0; attempt < 12; attempt += 1) {
+      const candidateLeft =
+        padding + Math.random() * Math.max(1, maxLeft - padding);
+      const candidateTop = padding + Math.random() * Math.max(1, maxTop - padding);
+      left = candidateLeft;
+      top = candidateTop;
+      if (
+        !noPosition ||
+        Math.hypot(candidateLeft - noPosition.left, candidateTop - noPosition.top) >=
+          72
+      ) {
+        break;
+      }
+    }
+
+    setNoPosition({ left, top });
+    setNoAttempts(attempts => attempts + 1);
+  };
+
+  const noButtonCopy =
+    noAttempts === 0
+      ? '不要 no no no'
+      : ['点不到吧', '再想想嘛', '这边也不行', '选愿意吧'][
+          Math.min(noAttempts - 1, 3)
+        ];
 
   const valid =
     state.step === 1
@@ -300,13 +345,48 @@ export default function Page() {
                 <br />
                 跟着感觉慢慢选就好。
               </p>
-              <button
-                className="primary-button opening-button"
-                type="button"
-                onClick={next}
-              >
-                拆开看看 <ChevronRight size={19} />
-              </button>
+              <div className="runaway-choice-area" ref={runawayAreaRef}>
+                <button
+                  className="primary-button opening-button yes-button"
+                  type="button"
+                  onClick={next}
+                >
+                  愿意 <Heart size={18} fill="currentColor" />
+                </button>
+                <button
+                  ref={noButtonRef}
+                  className={`no-button ${noPosition ? 'is-running' : ''}`}
+                  style={
+                    noPosition
+                      ? { left: noPosition.left, top: noPosition.top }
+                      : undefined
+                  }
+                  type="button"
+                  tabIndex={-1}
+                  aria-label="不要——这个按钮会俏皮地躲开"
+                  onMouseEnter={moveNoButton}
+                  onMouseDown={event => {
+                    event.preventDefault();
+                    moveNoButton();
+                  }}
+                  onTouchStart={event => {
+                    event.preventDefault();
+                    moveNoButton();
+                  }}
+                  onFocus={event => event.currentTarget.blur()}
+                  onClick={event => {
+                    event.preventDefault();
+                    moveNoButton();
+                  }}
+                >
+                  {noButtonCopy}
+                </button>
+              </div>
+              {noAttempts > 0 && (
+                <p className="runaway-hint" aria-live="polite">
+                  看来它不太想被点到，试试“愿意”吧 ♡
+                </p>
+              )}
             </div>
           )}
 
