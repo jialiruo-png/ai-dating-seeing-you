@@ -1,0 +1,8 @@
+{
+    "app_name": "ai-dating-seeing-you",
+    "app_description": "关于见你这件事：柔光手账风的移动端约会邀请与 Dating 卡片生成应用",
+    "capabilities": [
+        "access_control"
+    ],
+    "datasources": {}
+}
